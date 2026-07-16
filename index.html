@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CYBER SHIELD X — Autonomous AI Cyber Defense Platform</title>
+<style>
+:root{--primary:#00e5ff;--accent:#ff3d71;--danger:#ff1744;--warning:#ffab00;--safe:#00e676;--bg:#050a14;--card:#0a1628;--text:#e0e6ed;--muted:#6b7c93;--border:#152238}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.header{background:linear-gradient(135deg,#00e5ff,#ff3d71);padding:20px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,229,255,.3)}
+.header h1{font-size:1.4rem;color:#fff}
+.header .sub{font-size:.8rem;opacity:.85;color:#fff}
+.badge{background:rgba(255,255,255,.2);padding:4px 12px;border-radius:20px;font-size:.75rem;color:#fff}
+.container{max-width:1200px;margin:0 auto;padding:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
+.card h3{color:var(--primary);font-size:.85rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.stat{font-size:1.8rem;font-weight:700}.stat-label{color:var(--muted);font-size:.8rem;margin-top:4px}
+input,select,textarea{width:100%;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.9rem;margin-bottom:10px}
+button{padding:10px 18px;border:none;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;margin-right:6px;margin-top:6px}
+.btn-p{background:var(--primary);color:#000}.btn-a{background:var(--accent);color:#fff}.btn-d{background:var(--danger);color:#fff}.btn-s{background:var(--safe);color:#000}
+.result{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px;margin-top:10px;white-space:pre-wrap;font-size:.83rem;line-height:1.6}
+.nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.nav a{color:var(--primary);text-decoration:none;font-size:.8rem;padding:4px 8px;border-radius:6px;background:rgba(0,229,255,.1)}
+.sev-critical{color:var(--danger);font-weight:700}.sev-high{color:var(--accent);font-weight:700}.sev-medium{color:var(--warning)}.sev-low{color:var(--muted)}
+.agent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.agent-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
+.agent-card .name{font-weight:600;font-size:.82rem;color:var(--primary)}
+.agent-card .role{font-size:.68rem;color:var(--muted);margin:4px 0}
+.agent-card .tier{font-size:.65rem;padding:2px 6px;border-radius:10px}
+.tier-executive{background:rgba(0,229,255,.15);color:var(--primary)}.tier-specialist{background:rgba(255,61,113,.15);color:var(--accent)}
+.threat-item{border-left:3px solid;padding:8px 12px;margin:6px 0;border-radius:0 8px 8px 0}
+.threat-critical{border-color:var(--danger);background:rgba(255,23,68,.05)}.threat-high{border-color:var(--accent);background:rgba(255,61,113,.05)}
+.threat-medium{border-color:var(--warning);background:rgba(255,171,0,.05)}.threat-low{border-color:var(--muted)}
+@media(max-width:640px){.header h1{font-size:1.1rem}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="header"><div><h1>🛡️ CYBER SHIELD X</h1><div class="sub">Autonomous AI Cyber Defense Platform v1.0.0</div></div>
+<div style="display:flex;gap:8px"><span class="badge">37 AI Agents</span><span class="badge" id="ac">33 Active</span><span class="badge">Zero Trust</span></div></div>
+<div class="container">
+<div class="nav"><a href="#threats">🔥 Threats</a><a href="#simulate">⚡ Simulate</a><a href="#events">📊 Events</a><a href="#incidents">📋 Incidents</a><a href="#vulns">🔍 Vulnerabilities</a><a href="#intel">🌐 Threat Intel</a><a href="#endpoints">💻 Endpoints</a><a href="#compliance">📋 Compliance</a><a href="#score">📈 Score</a><a href="#agents">🤖 Agents</a></div>
+<div class="grid" id="sg"></div>
+
+<div class="card" id="simulate" style="margin-bottom:16px"><h3>⚡ Simulate Attack (Test Detection Engine)</h3>
+<select id="sat" style="width:auto"><option value="malware">Malware</option><option value="ransomware">Ransomware</option><option value="phishing">Phishing</option><option value="ddos">DDoS</option><option value="sql_injection">SQL Injection</option><option value="xss">XSS</option><option value="rce">RCE</option><option value="credential_theft">Credential Theft</option><option value="botnet">Botnet</option><option value="api_attack">API Attack</option></select>
+<button class="btn-a" onclick="simulateAttack()">Launch Simulated Attack</button>
+<div id="sr"></div></div>
+
+<div class="card" id="threats" style="margin-bottom:16px"><h3>🔥 Active Threats</h3>
+<button class="btn-p" onclick="getThreats()">Refresh Threats</button>
+<div id="tr"></div></div>
+
+<div class="card" id="events" style="margin-bottom:16px"><h3>📊 Security Events (SIEM)</h3>
+<button class="btn-p" onclick="getEvents()">Load Events</button>
+<div id="er"></div></div>
+
+<div class="card" id="incidents" style="margin-bottom:16px"><h3>📋 Incident Queue</h3>
+<button class="btn-p" onclick="getIncidents()">Load Incidents</button>
+<div id="ir"></div></div>
+
+<div class="card" id="vulns" style="margin-bottom:16px"><h3>🔍 Vulnerabilities</h3>
+<button class="btn-p" onclick="getVulns()">Scan Results</button>
+<div id="vr"></div></div>
+
+<div class="card" id="intel" style="margin-bottom:16px"><h3>🌐 Threat Intelligence</h3>
+<input type="text" id="ipchk" placeholder="Check IP reputation (e.g., 185.220.101.45)">
+<button class="btn-a" onclick="checkIP()">Check IP</button>
+<div id="ir2"></div></div>
+
+<div class="card" id="compliance" style="margin-bottom:16px"><h3>📋 Compliance Dashboard</h3>
+<select id="cf" style="width:auto"><option value="ISO27001">ISO 27001</option><option value="SOC2">SOC 2</option><option value="PCI_DSS">PCI DSS</option><option value="GDPR">GDPR</option><option value="HIPAA">HIPAA</option><option value="NIST_CSF">NIST CSF</option><option value="CIS_Controls">CIS Controls</option><option value="OWASP_Top10">OWASP Top 10</option><option value="MITRE_ATTACK">MITRE ATT&CK</option><option value="MITRE_D3FEND">MITRE D3FEND</option></select>
+<button class="btn-p" onclick="runCompliance()">Run Audit</button>
+<button class="btn-a" onclick="getCompliance()">View Reports</button>
+<div id="cr"></div></div>
+
+<div class="card" id="score" style="margin-bottom:16px"><h3>📈 Security Health Score</h3>
+<button class="btn-s" onclick="getScore()">Calculate Score</button>
+<div id="scr"></div></div>
+
+<div class="card" id="agents" style="margin-bottom:16px"><h3>🤖 AI Security Agent Fleet</h3>
+<button class="btn-p" onclick="getAgents()">View All 37 Agents</button>
+<div class="agent-grid" id="ag"></div></div>
+
+<div style="text-align:center;padding:20px;color:var(--muted);font-size:.8rem;border-top:1px solid var(--border);margin-top:20px">
+CYBER SHIELD X v1.0.0 • Built by Rabiu Hamza Mohammed • 14 Executive Agents + 23 Specialist Agents • MITRE ATT&CK Mapped</div>
+</div>
+<script>
+const A='https://superagent-2286fb2f.base44.app/functions/cyberShieldX';
+async function api(b){const r=await fetch(A,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});return await r.json()}
+async function init(){const d=await api({action:'stats'});if(d.stats){document.getElementById('sg').innerHTML=`<div class="card"><h3>AI Agents</h3><div class="stat">${d.stats.ai_agents}</div><div class="stat-label">14 exec + 23 spec</div></div><div class="card"><h3>Active Agents</h3><div class="stat">${d.stats.active_agents}</div><div class="stat-label">Online & monitoring</div></div><div class="card"><h3>Success Rate</h3><div class="stat">${d.stats.avg_agent_success}%</div><div class="stat-label">Avg across fleet</div></div><div class="card"><h3>Threats Detected</h3><div class="stat">${d.stats.threats_detected}</div><div class="stat-label">Total threats</div></div>`;document.getElementById('ac').textContent=d.stats.active_agents+' Active'}}
+async function simulateAttack(){const t=document.getElementById('sat').value;const d=await api({action:'simulate_attack',attack_type:t});if(d.threat){let h=`<div class="result"><b class="sev-${d.threat.severity}">${d.threat.severity.toUpperCase()}</b> — ${d.threat.threat_type}\n`;h+=`Source: ${d.threat.source_ip} → Target: ${d.threat.target_asset}\n`;h+=`Risk Score: ${d.threat.risk_score}/100 | MITRE: ${d.threat.mitre_attack_id}\n\n`;h+=`AI Analysis: ${d.threat.ai_analysis}\n\n`;h+=`Indicators: ${d.threat.indicators}\n`;if(d.auto_response){h+=`\n🤖 AUTO-RESPONSE (${d.auto_response.response_time_ms}ms):\n`;d.auto_response.actions.forEach(a=>h+='✓ '+a+'\n')}document.getElementById('sr').innerHTML=h+'</div>'}}
+async function getThreats(){const d=await api({action:'get_threats',limit:20});if(d.threats){let h='';if(!d.threats.length)h='<div class="result">No threats detected. Run a simulation above.</div>';d.threats.forEach(t=>{h+=`<div class="threat-item threat-${t.severity}"><b class="sev-${t.severity}">${t.severity.toUpperCase()}</b> — ${t.threat_type} → ${t.target_asset}\nSource: ${t.source_ip} | Score: ${t.risk_score}/100 | Status: ${t.status}\n${t.ai_analysis.substring(0,120)}...</div>`});document.getElementById('tr').innerHTML=h}}
+async function getEvents(){const d=await api({action:'get_events',limit:30});if(d.events){let h='<div class="result">';if(!d.events.length)h+='No events logged';d.events.slice(0,15).forEach(e=>{h+=`[${e.severity.toUpperCase()}] ${e.event_type} | ${e.source_ip||'-'} → ${e.asset||'-'}\nAI: ${e.ai_verdict}\n${e.blocked?'✓ BLOCKED':'○ MONITORING'}\n\n`});document.getElementById('er').innerHTML=h+'</div>'}}
+async function getIncidents(){const d=await api({action:'get_incidents',limit:20});if(d.incidents){let h='<div class="result">';if(!d.incidents.length)h+='No incidents';d.incidents.forEach(i=>{h+=`[${i.severity.toUpperCase()}] ${i.incident_id} — ${i.title}\nStatus: ${i.status} | Agent: ${i.assigned_agent}\nActions: ${i.response_actions}\n\n`});document.getElementById('ir').innerHTML=h+'</div>'}}
+async function getVulns(){const d=await api({action:'get_vulnerabilities',limit:20});if(d.vulnerabilities){let h='<div class="result">';if(!d.vulnerabilities.length)h+='No vulnerabilities detected';d.vulnerabilities.forEach(v=>{h+=`[${v.severity.toUpperCase()}] ${v.cve_id||v.title} (CVSS: ${v.cvss_score})\nSystem: ${v.affected_system} | Status: ${v.status}\n${v.recommendation}\n\n`});document.getElementById('vr').innerHTML=h+'</div>'}}
+async function checkIP(){const ip=document.getElementById('ipchk').value;if(!ip)return;const d=await api({action:'check_ip_reputation',ip});if(d.reputation){document.getElementById('ir2').innerHTML=`<div class="result">IP: ${d.reputation.ip}\nReputation: ${d.reputation.reputation.toUpperCase()}\nRisk: ${d.reputation.risk_level}\nDetails: ${d.reputation.details}</div>`}}
+async function runCompliance(){const f=document.getElementById('cf').value;const d=await api({action:'run_compliance_check',framework:f});if(d.report){document.getElementById('cr').innerHTML=`<div class="result"><b>${d.report.report_title}</b>\nScore: ${d.report.score}/${d.report.max_score} | Status: ${d.report.status}\n\nFindings: ${d.report.findings}\n\nRecommendations: ${d.report.recommendations}</div>`}}
+async function getCompliance(){const d=await api({action:'get_compliance_reports'});if(d.reports){let h='<div class="result">';if(!d.reports.length)h+='No compliance reports. Run an audit above.';d.reports.forEach(r=>{h+=`[${r.framework}] ${r.report_title}\nScore: ${r.score}/${r.max_score} | ${r.status}\n\n`});document.getElementById('cr').innerHTML=h+'</div>'}}
+async function getScore(){const d=await api({action:'security_score'});if(d.score!==undefined){document.getElementById('scr').innerHTML=`<div class="result"><b>Security Score: ${d.score}/100 (Grade: ${d.grade})</b>\n\nOpen incidents: ${d.breakdown.open_incidents}\nCritical threats: ${d.breakdown.critical_threats}\nHigh vulnerabilities: ${d.breakdown.high_vulns}\nCompromised endpoints: ${d.breakdown.compromised_endpoints}\nTotal endpoints: ${d.breakdown.total_endpoints}\nTotal threats: ${d.breakdown.total_threats}</div>`}}
+async function getAgents(){const d=await api({action:'agents'});if(d.agents){let h='';d.agents.forEach(a=>{h+=`<div class="agent-card"><div class="name">${a.agent_name}</div><div class="role">${a.specialization.substring(0,50)}</div><span class="tier tier-${a.tier}">${a.tier}</span><div class="role">Success: ${a.success_rate}%</div></div>`});document.getElementById('ag').innerHTML=h}}
+init();
+</script>
+</body>
+</html>
